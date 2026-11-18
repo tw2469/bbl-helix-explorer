@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore cylindrical and staircase single-chain polymer helices.">
+  <title>BBL Helix Explorer</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="helix" viewBox="0 0 24 24"><path d="M5 3c0 8 14 10 14 18M19 3c0 8-14 10-14 18M6 5h12M8 8h8M8 16h8M6 19h12"/></symbol>
+    <symbol id="tune" viewBox="0 0 24 24"><path d="M4 7h6m4 0h6M4 17h10m4 0h2"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></symbol>
+    <symbol id="cube" viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9L4 7.5m8 4.5 8-4.5M12 12v9"/></symbol>
+    <symbol id="reset-icon" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.5 5.8M4 6v6h6"/></symbol>
+    <symbol id="download" viewBox="0 0 24 24"><path d="M12 4v11m-4-4 4 4 4-4M5 16v4h14v-4"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></symbol>
+    <symbol id="chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="bookmark" viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z"/></symbol>
+    <symbol id="orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="6" transform="rotate(-33 12 12)"/></symbol>
+  </svg>
+  <header class="topbar">
+    <div class="top-inner">
+      <a class="brand" href="./" aria-label="BBL Helix Explorer home"><span class="brand-icon"><svg class="icon"><use href="#helix"/></svg></span><span>BBL Helix Explorer</span></a>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="intro">
+      <div>
+        <h1>BBL Helix Explorer</h1>
+        <p>Explore the geometry of cylindrical and staircase single-chain helices.</p>
+      </div>
+      <button type="button" class="button export" id="export"><svg class="icon"><use href="#download"/></svg> Export coordinates</button>
+    </div>
+    <div class="workbench">
+      <section class="card controls" aria-labelledby="parameters-title">
+        <div class="card-heading"><span class="section-icon"><svg class="icon"><use href="#tune"/></svg></span><h2 id="parameters-title">Model parameters</h2></div>
+        <div class="controls-body">
+          <div class="field">
+            <label for="preset"><svg class="icon"><use href="#bookmark"/></svg> Study preset</label>
+            <div class="select-wrap">
+              <select id="preset">
+                <option value="custom">Custom geometry</option>
+                <option value="study-cylinder" selected>39-unit study · Cylindrical</option>
+                <option value="study-staircase">39-unit study · Staircase</option>
+                <option value="bbl-cylinder">40-unit trans-BBL · Cylindrical</option>
+                <option value="bbl-staircase">40-unit trans-BBL · Staircase</option>
+              </select>
+              <svg class="icon"><use href="#chevron"/></svg>
+            </div>
+            <p class="reference-note" id="reference-note">Reference · p(g₄ 2T–TT)</p>
+          </div>
+          <fieldset class="field geometry">
+            <legend>Geometry</legend>
+            <div class="segmented" id="geometry">
+              <label><input type="radio" name="geometry" value="cylinder" checked><span>Cylindrical</span></label>
+              <label><input type="radio" name="geometry" value="staircase"><span>Staircase</span></label>
+            </div>
+          </fieldset>
+          <div class="field slider-field">
+            <div class="field-line"><label for="radius-number">Radius</label><div class="number-wrap"><input type="number" id="radius-number" min="0.5" max="7" step="0.05" value="3"><span>nm</span></div></div>
+            <input type="range" id="radius" min="0.5" max="7" step="0.05" value="3" aria-label="Radius in nanometers">
+            <div class="range-ends"><span>0.5 nm</span><span>7.0 nm</span></div>
+          </div>
+          <div class="field slider-field">
+            <div class="field-line"><label for="pitch-number">Pitch</label><div class="number-wrap"><input type="number" id="pitch-number" min="0.5" max="80" step="0.1" value="22.4"><span>nm</span></div></div>
+            <input type="range" id="pitch" min="0.5" max="80" step="0.1" value="22.4" aria-label="Pitch in nanometers">
+            <div class="range-ends"><span>0.5 nm</span><span>80 nm</span></div>
+          </div>
+          <div class="field slider-field">
+            <div class="field-line"><label for="units-number">Chain length</label><div class="number-wrap"><input type="number" id="units-number" min="2" max="200" step="1" value="39"><span>units</span></div></div>
+            <input type="range" id="units" min="2" max="200" step="1" value="39" aria-label="Chain length in repeat units">
+            <div class="range-ends"><span>2 units</span><span>200 units</span></div>
+          </div>
+          <fieldset class="field handed">
+            <legend>Handedness</legend>
+            <div class="segmented" id="handedness">
+              <label><input type="radio" name="handedness" value="1" checked><span><b>P</b> Right-handed</span></label>
+              <label><input type="radio" name="handedness" value="-1"><span><b>M</b> Left-handed</span></label>
+            </div>
+          </fieldset>
+          <div class="control-footer"><button class="text-button" id="reset" type="button"><svg class="icon"><use href="#reset-icon"/></svg> Reset parameters</button></div>
+        </div>
+      </section>
+      <div class="results">
+        <section class="card viewer" aria-labelledby="viewer-title">
+          <div class="card-heading viewer-heading">
+            <span class="section-icon"><svg class="icon"><use href="#cube"/></svg></span><h2 id="viewer-title">Geometry viewer</h2>
+            <div class="view-actions">
+              <div class="segmented view-switch" id="view-switch" aria-label="Camera view">
+                <button type="button" data-view="3d" aria-pressed="true">3D</button>
+                <button type="button" data-view="top" aria-pressed="false">Top</button>
+                <button type="button" data-view="side" aria-pressed="false">Side</button>
+              </div>
+              <button type="button" id="reset-camera" class="button icon-button" aria-label="Reset camera" title="Reset camera"><svg class="icon"><use href="#reset-icon"/></svg></button>
+            </div>
+          </div>
+          <div class="viewport">
+            <canvas id="scene" tabindex="0" aria-label="Interactive helix geometry. Use arrow keys to rotate, plus and minus to zoom, or Home to reset the view."></canvas>
+            <div id="model-warning" class="model-warning" role="status" hidden></div>
+            <div class="model-label"><span></span><strong id="model-name">Cylindrical</strong><i></i><span id="model-hand">P · Right-handed</span></div>
+            <div class="scale-label" id="scale-label" aria-hidden="true"><span></span><b>5 nm</b></div>
+            <div class="interaction-hint"><svg class="icon"><use href="#orbit"/></svg><span>Drag to rotate · Scroll to zoom</span></div>
+          </div>
+          <div class="viewer-footer">
+            <span><i class="legend-unit"></i>Repeat unit</span><span><i class="legend-backbone"></i>Backbone</span><span><i class="legend-axis"></i>Helix axis</span>
+          </div>
+        </section>
+        <section class="metrics" aria-label="Calculated geometry" aria-live="polite">
+          <div class="card metric"><span>Turns</span><div><strong id="metric-turns">—</strong><small>turns</small></div><p>Across the chain</p></div>
+          <div class="card metric"><span>Monomers per period</span><div><strong id="metric-period">—</strong><small>units</small></div><p>Per full 360° rotation</p></div>
+          <div class="card metric"><span>Axial span</span><div><strong id="metric-span">—</strong><small>nm</small></div><p>First to last unit</p></div>
+          <div class="card metric"><span>Twist per step</span><div><strong id="metric-twist">—</strong><small>°</small></div><p id="twist-direction">Right-handed rotation</p></div>
+        </section>
+      </div>
+    </div>
+    <details class="card method">
+      <summary><span class="section-icon"><svg class="icon"><use href="#info"/></svg></span><span>Geometry assumptions &amp; calculation</span><svg class="icon disclosure"><use href="#chevron"/></svg></summary>
+      <div class="method-body" id="method-body"></div>
+    </details>
+    <footer class="page-footer"><span>Repeat-unit geometry · Coordinates in nm</span><span id="footer-model"></span></footer>
+  </main>
+</body>
+</html>
